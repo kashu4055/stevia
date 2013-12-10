@@ -189,6 +189,7 @@ public final class SteviaWebControllerFactory implements Constants {
             DesiredCapabilities capabilities = new DesiredCapabilities();
             capabilities.setCapability(CapabilityType.BROWSER_NAME, "iOS");
             capabilities.setCapability(CapabilityType.VERSION, "6.0");
+            capabilities.setCapability("deviceName", "ipad retina");
             capabilities.setCapability(CapabilityType.PLATFORM, "Mac");
             capabilities.setCapability("app", app.getAbsolutePath());
             try {
