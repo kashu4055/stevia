@@ -15,6 +15,7 @@
 	
 	<bean id="seleniumController" class="com.persado.oss.quality.stevia.selenium.core.controllers.SeleniumWebController" scope="prototype" />
 	<bean id="webDriverController" class="com.persado.oss.quality.stevia.selenium.core.controllers.WebDriverWebController" scope="prototype" />
+    <bean id="appiumController" class="com.persado.oss.quality.stevia.selenium.core.controllers.AppiumWebController" scope="prototype" />
 	
 
 	<import resource="classpath:META-INF/spring/test-beans-*.xml" />
