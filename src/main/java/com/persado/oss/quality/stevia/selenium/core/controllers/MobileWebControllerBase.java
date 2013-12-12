@@ -86,7 +86,9 @@ public class MobileWebControllerBase extends WebControllerBase implements WebCon
 
     @Override
     public void input(String locator, String value) {
-
+        WebElement element = waitForElement(locator);
+        element.clear();
+        element.sendKeys(value);
     }
 
     @Override

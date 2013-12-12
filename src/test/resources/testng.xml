@@ -12,6 +12,19 @@
 	<parameter name="actionsLogging" value="true" />
 	<parameter name="tests.takeScreenshot" value="true" />
 
+
+    <parameter name="operatingSystem" value="iOS" /> <!-- iOS, Android -->
+    <parameter name="version" value="6.0" /> <!-- (Android) 4.2/4.3 (iOS) 6.0/6.1/7.0 -->
+    <parameter name="deviceName" value="iphone" /> <!-- iphone, iphone retina, ipad, ipad retina -->
+    <parameter name="platform" value="iphone" /> <!-- mac, windows -->
+    <parameter name="appPath" value="/Users/gkogketsof/Library/Developer/Xcode/DerivedData/UICatalog-ffxccrvvnwpbfpelfveunzwlgvtd/Build/Products/Release-iphonesimulator/" />
+    <parameter name="appName" value="UICatalog.app" />
+    <parameter name="appPackage" value="com.example.android.apis" />
+    <parameter name="appActivity" value=".ApiDemos" />
+
+
+
+
 	<listeners>
 		<listener class-name="org.uncommons.reportng.HTMLReporter" />
 	</listeners>
