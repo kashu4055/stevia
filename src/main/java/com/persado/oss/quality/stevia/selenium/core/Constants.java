@@ -45,6 +45,19 @@ public interface Constants {
 	
 	public static final String TRUE = "true";
 
-	
-	
+    public static final String OPERATING_SYSTEM = "operatingSystem";
+
+    public static final String VERSION = "version";
+
+    public static final String DEVICE_NAME = "deviceName";
+
+    public static final String PLATFORM = "platform";
+
+    public static final String APPLICATION_PATH = "appPath";
+
+    public static final String APPLICATION_NAME = "appName";
+
+    public static final String APPLICATION_PACKAGE = "appPackage";
+
+    public static final String APPLICATION_ACTIVITY = "appActivity";
 }

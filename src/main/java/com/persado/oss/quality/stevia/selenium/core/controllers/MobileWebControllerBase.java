@@ -1,21 +1,33 @@
 package com.persado.oss.quality.stevia.selenium.core.controllers;
 
 import com.persado.oss.quality.stevia.network.http.HttpCookie;
+import com.persado.oss.quality.stevia.selenium.core.SteviaContext;
 import com.persado.oss.quality.stevia.selenium.core.WebController;
 import com.persado.oss.quality.stevia.selenium.core.controllers.commonapi.KeyInfo;
-import org.openqa.selenium.Point;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.IOException;
 import java.util.List;
 
 /**
- * Created by gkogketsof on 12/10/13.
+ * Created by gkogketsof on 12/11/13.
  */
-public class AppiumWebController extends WebControllerBase implements WebController {
+public class MobileWebControllerBase extends WebControllerBase implements WebController {
+
     private WebDriver driver;
+
+    /** The Constant THREAD_SLEEP. */
+    private static final long THREAD_SLEEP = 100;
+
+    public enum ElementLocatorType {
+        xpath,
+        tag,
+        name,
+    }
+
     @Override
     public void enableActionsLogging() {
 
@@ -33,17 +45,18 @@ public class AppiumWebController extends WebControllerBase implements WebControl
 
     @Override
     public void quit() {
-
+        driver.quit();
     }
 
     @Override
     public WebElement waitForElement(String locator) {
-        return null;
+        return waitForElement(locator, SteviaContext.getWaitForElement());
     }
 
     @Override
     public WebElement waitForElement(String locator, long waitSeconds) {
-        return null;
+        WebDriverWait wait = new WebDriverWait(driver, waitSeconds,THREAD_SLEEP);
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(determineLocator(locator)));
     }
 
     @Override
@@ -78,7 +91,7 @@ public class AppiumWebController extends WebControllerBase implements WebControl
 
     @Override
     public void press(String locator) {
-
+        waitForElement(locator).click();
     }
 
     @Override
@@ -258,12 +271,19 @@ public class AppiumWebController extends WebControllerBase implements WebControl
 
     @Override
     public boolean isComponentVisible(String locator) {
-        return false;
+        return isComponentPresent(locator) && driver.findElement(determineLocator(locator)).isDisplayed();
     }
 
     @Override
     public boolean isComponentVisible(String locator, long seconds) {
-        return false;
+        try {
+            WebDriverWait wait = new WebDriverWait(driver, seconds);
+            wait.until(ExpectedConditions.visibilityOfElementLocated(determineLocator(locator)));
+            return true;
+        } catch (TimeoutException e) {
+            return false;
+
+        }
     }
 
     @Override
@@ -438,7 +458,7 @@ public class AppiumWebController extends WebControllerBase implements WebControl
 
     @Override
     public String getAttributeValue(String locator, String attribute) {
-        return null;
+        return waitForElement(locator).getAttribute(attribute);
     }
 
     @Override
@@ -531,7 +551,51 @@ public class AppiumWebController extends WebControllerBase implements WebControl
         return null;
     }
 
+    /**
+     * Gets the driver.
+     *
+     * @return the driver
+     */
+    public WebDriver getDriver() {
+        return driver;
+    }
+
+    /**
+     * Sets the driver.
+     *
+     * @param driver
+     *            the new driver
+     */
     public void setDriver(WebDriver driver) {
         this.driver = driver;
+    }
+
+    /**
+     * Determine locator.
+     *
+     * @param locator
+     *            the locator
+     * @return the by
+     */
+    public By determineLocator(String locator) {
+        if (locator.startsWith(ElementLocatorType.xpath.toString())) {
+            return By.xpath(findLocatorSubstring(locator));
+        } else if (locator.startsWith("//")) {
+            return By.xpath(locator);
+        } else if(locator.startsWith(ElementLocatorType.name.toString())) {
+            return By.name(findLocatorSubstring(locator));
+        } else {
+            return By.tagName(findLocatorSubstring(locator));
+        }
+    }
+
+    /**
+     * Find locator substring.
+     *
+     * @param locator the element locator
+     * @return the string after the character '='
+     */
+    private String findLocatorSubstring(String locator){
+        return locator.substring(locator.indexOf('=')+1);
     }
 }

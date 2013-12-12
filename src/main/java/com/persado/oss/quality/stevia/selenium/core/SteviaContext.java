@@ -34,6 +34,8 @@ package com.persado.oss.quality.stevia.selenium.core;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import com.persado.oss.quality.stevia.selenium.core.controllers.MobileWebControllerBase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -201,13 +203,15 @@ public class SteviaContext {
 		if (instance instanceof WebDriverWebController) {
 			context.isWebDriver = true;
 			STEVIA_CONTEXT_LOG.warn("Handle is : "+((WebDriverWebController)instance).getDriver().getWindowHandle());
-		} else {
+		} else if(instance instanceof MobileWebControllerBase) {
+            context.isWebDriver = true;
+            //STEVIA_CONTEXT_LOG.warn("Handle is : "+((MobileWebControllerBase)instance).getDriver().getWindowHandle());
+        } else {
 			context.isWebDriver = false;   
 		}
 
 		STEVIA_CONTEXT_LOG.info("Context ready, controller is now set, type is {}", context.isWebDriver ? "Webdriver" : "Selenium");
 		Thread.currentThread().setName("Stevia ["+(context.isWebDriver ? "Webdriver" : "Selenium")+"] - context Active "+System.currentTimeMillis()%2048);
-		
 	}
 	
 	/**

@@ -38,8 +38,10 @@ public final class SteviaWebControllerFactory implements Constants {
 			controller = new WebDriverWebControllerFactoryImpl().initialize(context, (WebController) context.getBean("webDriverController"));
 		} else if (SteviaContext.getParam(DRIVER_TYPE).contentEquals("selenium")) {
 			controller = new SeleniumWebControllerFactoryImpl().initialize(context, (WebController) context.getBean("seleniumController"));
-		} else if(SteviaContext.getParam(DRIVER_TYPE).contentEquals("appium")) {
-            controller = new AppiumControllerFactoryImpl().initialize(context, (WebController) context.getBean("appiumController"));
+		} else if(SteviaContext.getParam(DRIVER_TYPE).contentEquals("appium-ios")) {
+            controller = new AppiumIOSControllerFactoryImpl().initialize(context, (WebController) context.getBean("appiumIOSController"));
+        } else if(SteviaContext.getParam(DRIVER_TYPE).contentEquals("appium-android")) {
+            controller = new AppiumAndroidControllerFactoryImpl().initialize(context, (WebController) context.getBean("appiumAndroidController"));
         }
 		return controller;
 	}
@@ -50,8 +52,8 @@ public final class SteviaWebControllerFactory implements Constants {
 			controller = new WebDriverWebControllerFactoryImpl().initialize(context, controller);
 		} else if (controller instanceof SeleniumWebController){
 			controller = new SeleniumWebControllerFactoryImpl().initialize(context, controller);
-		} else if (controller instanceof AppiumWebController){
-            controller = new AppiumControllerFactoryImpl().initialize(context,controller);
+		} else if (controller instanceof AppiumIOSWebController){
+            controller = new AppiumIOSControllerFactoryImpl().initialize(context,controller);
         }
 		return controller;
 	}
@@ -179,18 +181,18 @@ public final class SteviaWebControllerFactory implements Constants {
 		}
 	}
 
-    static class AppiumControllerFactoryImpl implements WebControllerFactory {
+    static class AppiumIOSControllerFactoryImpl implements WebControllerFactory {
         public WebController initialize(ApplicationContext context, WebController controller) {
-            AppiumWebController wdController = (AppiumWebController) controller;
+            AppiumIOSWebController wdController = (AppiumIOSWebController) controller;
             WebDriver driver = null;
 
-            File appDir = new File("/Users/gkogketsof/Library/Developer/Xcode/DerivedData/UICatalog-ffxccrvvnwpbfpelfveunzwlgvtd/Build/Products/Release-iphonesimulator/");
-            File app = new File(appDir, "UICatalog.app");
+            File appDir = new File(SteviaContext.getParam(APPLICATION_PATH));
+            File app = new File(appDir, SteviaContext.getParam(APPLICATION_NAME));
             DesiredCapabilities capabilities = new DesiredCapabilities();
-            capabilities.setCapability(CapabilityType.BROWSER_NAME, "iOS");
-            capabilities.setCapability(CapabilityType.VERSION, "6.0");
-            capabilities.setCapability("deviceName", "ipad retina");
-            capabilities.setCapability(CapabilityType.PLATFORM, "Mac");
+            capabilities.setCapability(CapabilityType.BROWSER_NAME, SteviaContext.getParam(OPERATING_SYSTEM));
+            capabilities.setCapability(CapabilityType.VERSION, SteviaContext.getParam(VERSION));
+            capabilities.setCapability("deviceName", SteviaContext.getParam(DEVICE_NAME));
+            capabilities.setCapability(CapabilityType.PLATFORM, SteviaContext.getParam(PLATFORM));
             capabilities.setCapability("app", app.getAbsolutePath());
             try {
                 driver = new SwipeableWebDriver(new URL("http://" + SteviaContext.getParam(RC_HOST) + ":" + SteviaContext.getParam(RC_PORT)
@@ -214,6 +216,33 @@ public final class SteviaWebControllerFactory implements Constants {
 
         public TouchScreen getTouch() {
             return touch;
+        }
+    }
+
+    static class AppiumAndroidControllerFactoryImpl implements WebControllerFactory{
+        public WebController initialize(ApplicationContext context, WebController controller) {
+
+            AppiumAndroidWebController wdController = (AppiumAndroidWebController) controller;
+            WebDriver driver = null;
+
+            File appDir = new File(SteviaContext.getParam(APPLICATION_PATH));
+            File app = new File(appDir, SteviaContext.getParam(APPLICATION_NAME));
+            DesiredCapabilities capabilities = new DesiredCapabilities();
+            capabilities.setCapability(CapabilityType.BROWSER_NAME, SteviaContext.getParam(OPERATING_SYSTEM));
+            capabilities.setCapability(CapabilityType.VERSION, SteviaContext.getParam(VERSION));
+            capabilities.setCapability(CapabilityType.PLATFORM, SteviaContext.getParam(PLATFORM));
+            capabilities.setCapability("app", app.getAbsolutePath());
+            capabilities.setCapability("app-package", SteviaContext.getParam(APPLICATION_PACKAGE));
+            capabilities.setCapability("app-activity", SteviaContext.getParam(APPLICATION_ACTIVITY));
+            try {
+                driver = new SwipeableWebDriver(new URL("http://" + SteviaContext.getParam(RC_HOST) + ":" + SteviaContext.getParam(RC_PORT)
+                        + "/wd/hub"), capabilities);
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+
+            wdController.setDriver(driver);
+            return wdController;
         }
     }
 
