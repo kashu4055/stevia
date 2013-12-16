@@ -194,9 +194,14 @@ public final class SteviaWebControllerFactory implements Constants {
             capabilities.setCapability("deviceName", SteviaContext.getParam(DEVICE_NAME));
             capabilities.setCapability(CapabilityType.PLATFORM, SteviaContext.getParam(PLATFORM));
             capabilities.setCapability("app", app.getAbsolutePath());
+            capabilities.setCapability("canRotate", true);
+
+            Augmenter augmenter = new Augmenter();
+            augmenter.addDriverAugmentation("canRotate", new AddRotatable());
+
             try {
-                driver = new SwipeableWebDriver(new URL("http://" + SteviaContext.getParam(RC_HOST) + ":" + SteviaContext.getParam(RC_PORT)
-                        + "/wd/hub"), capabilities);
+                driver = augmenter.augment(new SwipeableWebDriver(new URL("http://" + SteviaContext.getParam(RC_HOST) + ":" + SteviaContext.getParam(RC_PORT)
+                        + "/wd/hub"), capabilities));
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             }
@@ -212,6 +217,9 @@ public final class SteviaWebControllerFactory implements Constants {
         public SwipeableWebDriver(URL remoteAddress, Capabilities desiredCapabilities) {
             super(remoteAddress, desiredCapabilities);
             touch = new RemoteTouchScreen(getExecuteMethod());
+        }
+
+        public SwipeableWebDriver() {
         }
 
         public TouchScreen getTouch() {
@@ -231,12 +239,20 @@ public final class SteviaWebControllerFactory implements Constants {
             capabilities.setCapability(CapabilityType.BROWSER_NAME, SteviaContext.getParam(OPERATING_SYSTEM));
             capabilities.setCapability(CapabilityType.VERSION, SteviaContext.getParam(VERSION));
             capabilities.setCapability(CapabilityType.PLATFORM, SteviaContext.getParam(PLATFORM));
-            capabilities.setCapability("app", app.getAbsolutePath());
             capabilities.setCapability("app-package", SteviaContext.getParam(APPLICATION_PACKAGE));
             capabilities.setCapability("app-activity", SteviaContext.getParam(APPLICATION_ACTIVITY));
+            capabilities.setCapability("canRotate", true);
+
+            if(!app.equals(appDir)){
+                capabilities.setCapability("app", app.getAbsolutePath());
+            }
+
+            Augmenter augmenter = new Augmenter();
+            augmenter.addDriverAugmentation("canRotate", new AddRotatable());
+
             try {
-                driver = new SwipeableWebDriver(new URL("http://" + SteviaContext.getParam(RC_HOST) + ":" + SteviaContext.getParam(RC_PORT)
-                        + "/wd/hub"), capabilities);
+                driver = augmenter.augment(new SwipeableWebDriver(new URL("http://" + SteviaContext.getParam(RC_HOST) + ":" + SteviaContext.getParam(RC_PORT)
+                        + "/wd/hub"), capabilities));
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             }

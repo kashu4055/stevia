@@ -187,4 +187,12 @@ public abstract class WebControllerBase implements WebController {
 		return tableData;
 	}
 
+    public void scrollTo(String locator){
+        throw new UnsupportedOperationException("The scrollT0 operation only applies to mobile");
+    }
+
+    public void setScreenOrientation(String orientation){
+        throw new UnsupportedOperationException("The setScreenOrientation operation only applies to mobile");
+    }
+
 }

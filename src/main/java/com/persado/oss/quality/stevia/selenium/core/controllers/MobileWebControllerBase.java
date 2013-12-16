@@ -6,10 +6,13 @@ import com.persado.oss.quality.stevia.selenium.core.WebController;
 import com.persado.oss.quality.stevia.selenium.core.controllers.commonapi.KeyInfo;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.remote.Augmenter;
+import org.openqa.selenium.remote.RemoteWebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -71,12 +74,13 @@ public class MobileWebControllerBase extends WebControllerBase implements WebCon
 
     @Override
     public WebElement waitForElementPresence(String locator) {
-        return null;
+        return waitForElementPresence(locator, SteviaContext.getWaitForElement());
     }
 
     @Override
     public WebElement waitForElementPresence(String locator, long waitSeconds) {
-        return null;
+        WebDriverWait wait = new WebDriverWait(driver, waitSeconds,THREAD_SLEEP);
+        return wait.until(ExpectedConditions.presenceOfElementLocated(determineLocator(locator)));
     }
 
     @Override
@@ -545,7 +549,7 @@ public class MobileWebControllerBase extends WebControllerBase implements WebCon
 
     @Override
     public Point getElementPosition(String locator) {
-        return null;
+        return waitForElement(locator).getLocation();
     }
 
     @Override
@@ -599,5 +603,22 @@ public class MobileWebControllerBase extends WebControllerBase implements WebCon
      */
     private String findLocatorSubstring(String locator){
         return locator.substring(locator.indexOf('=')+1);
+    }
+
+    public void scrollTo(String locator){
+        WebElement element = waitForElementPresence(locator);
+        HashMap<String,Double> scrollObject = new HashMap<String, Double>();
+        scrollObject.put("element",Double.parseDouble(((RemoteWebElement) element).getId()));
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript("mobile: scrollTo", scrollObject);
+    }
+
+    public void setScreenOrientation(String orientation){
+        System.out.println(((Rotatable)driver).getOrientation());
+        ((Rotatable)driver).rotate(ScreenOrientation.LANDSCAPE);
+//        HashMap<String,Double> scrollObject = new HashMap<String, Double>();
+//        scrollObject.put("orientation",Double.parseDouble("LANDSCAPE"));
+//        JavascriptExecutor js = (JavascriptExecutor) driver;
+//        js.executeScript("mobile: orientation", scrollObject);
     }
 }
