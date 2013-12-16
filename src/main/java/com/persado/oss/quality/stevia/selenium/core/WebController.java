@@ -898,5 +898,9 @@ public interface WebController {
 	 * @return the page source
 	 */
 	String getPageSource() ;
+
+    void scrollTo(String locator);
+
+    void setScreenOrientation(String orientation);
 	
 }
