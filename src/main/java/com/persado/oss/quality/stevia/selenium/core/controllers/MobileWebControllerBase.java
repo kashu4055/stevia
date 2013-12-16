@@ -1,24 +1,33 @@
 package com.persado.oss.quality.stevia.selenium.core.controllers;
 
-import com.persado.oss.quality.stevia.network.http.HttpCookie;
-import com.persado.oss.quality.stevia.selenium.core.SteviaContext;
-import com.persado.oss.quality.stevia.selenium.core.WebController;
-import com.persado.oss.quality.stevia.selenium.core.controllers.commonapi.KeyInfo;
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+
 import org.apache.commons.io.FileUtils;
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.Point;
+import org.openqa.selenium.Rotatable;
+import org.openqa.selenium.ScreenOrientation;
+import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.interactions.touch.TouchActions;
-import org.openqa.selenium.remote.Augmenter;
 import org.openqa.selenium.remote.RemoteWebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
+import com.persado.oss.quality.stevia.network.http.HttpCookie;
+import com.persado.oss.quality.stevia.selenium.core.SteviaContext;
+import com.persado.oss.quality.stevia.selenium.core.WebController;
+import com.persado.oss.quality.stevia.selenium.core.controllers.commonapi.KeyInfo;
 
 /**
  * Created by gkogketsof on 12/11/13.
