@@ -4,13 +4,18 @@ import com.persado.oss.quality.stevia.network.http.HttpCookie;
 import com.persado.oss.quality.stevia.selenium.core.SteviaContext;
 import com.persado.oss.quality.stevia.selenium.core.WebController;
 import com.persado.oss.quality.stevia.selenium.core.controllers.commonapi.KeyInfo;
+import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.interactions.touch.TouchActions;
 import org.openqa.selenium.remote.Augmenter;
 import org.openqa.selenium.remote.RemoteWebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -18,9 +23,11 @@ import java.util.List;
 /**
  * Created by gkogketsof on 12/11/13.
  */
-public class MobileWebControllerBase extends WebControllerBase implements WebController {
+public abstract class MobileWebControllerBase extends WebControllerBase implements WebController {
 
     private WebDriver driver;
+
+    private static final Logger MOBILEWEBDRIVER_LOG = LoggerFactory.getLogger(MobileWebControllerBase.class);
 
     /** The Constant THREAD_SLEEP. */
     private static final long THREAD_SLEEP = 100;
@@ -207,7 +214,9 @@ public class MobileWebControllerBase extends WebControllerBase implements WebCon
 
     @Override
     public void takeScreenShot() throws IOException {
-
+        MOBILEWEBDRIVER_LOG.info("Take Screenshot");
+        File scrFile = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
+        FileUtils.copyFile(scrFile, new File("build/reports/tests/html/screenshots/TestError.jpg"),true);
     }
 
     @Override
@@ -621,5 +630,11 @@ public class MobileWebControllerBase extends WebControllerBase implements WebCon
 //        scrollObject.put("orientation",Double.parseDouble("LANDSCAPE"));
 //        JavascriptExecutor js = (JavascriptExecutor) driver;
 //        js.executeScript("mobile: orientation", scrollObject);
+    }
+
+    public void tapOnElement(String locator){
+        WebElement element = waitForElementPresence(locator);
+        TouchActions tap = new TouchActions(driver).singleTap(element);
+        tap.perform();
     }
 }

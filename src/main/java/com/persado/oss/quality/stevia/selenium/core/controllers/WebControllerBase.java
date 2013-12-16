@@ -195,4 +195,8 @@ public abstract class WebControllerBase implements WebController {
         throw new UnsupportedOperationException("The setScreenOrientation operation only applies to mobile");
     }
 
+    public void tapOnElement(String locator){
+        throw new UnsupportedOperationException("The setScreenOrientation operation only applies to mobile");
+    }
+
 }

@@ -902,5 +902,7 @@ public interface WebController {
     void scrollTo(String locator);
 
     void setScreenOrientation(String orientation);
+
+    void tapOnElement(String locator);
 	
 }
