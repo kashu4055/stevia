@@ -15,7 +15,6 @@ import org.testng.annotations.Test;
 import com.persado.oss.quality.stevia.annotations.RunsWithController;
 import com.persado.oss.quality.stevia.annotations.RunsWithControllerHelper;
 import com.persado.oss.quality.stevia.selenium.core.SteviaContext;
-import com.persado.oss.quality.stevia.selenium.core.WebController;
 
 public class ControllerMaskingListener implements IInvokedMethodListener2 {
 
