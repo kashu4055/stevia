@@ -212,7 +212,8 @@ public class MobileWebControllerBase extends WebControllerBase implements WebCon
 
     @Override
     public String getText(String locator) {
-        return null;
+    	WebElement element = waitForElement(locator);
+    	return element.getText();
     }
 
     @Override
