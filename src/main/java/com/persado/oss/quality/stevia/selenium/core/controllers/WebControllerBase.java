@@ -199,4 +199,5 @@ public abstract class WebControllerBase implements WebController {
         throw new UnsupportedOperationException("The setScreenOrientation operation only applies to mobile");
     }
 
+>>>>>>> branch '0.8.x-mobile' of https://github.com/persado/stevia.git
 }
