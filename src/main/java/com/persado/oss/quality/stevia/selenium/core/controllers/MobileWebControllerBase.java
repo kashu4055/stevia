@@ -609,8 +609,11 @@ public abstract class MobileWebControllerBase extends WebControllerBase implemen
             return By.xpath(locator);
         } else if(locator.startsWith(ElementLocatorType.name.toString())) {
             return By.name(findLocatorSubstring(locator));
-        } else {
-            return By.tagName(findLocatorSubstring(locator));
+        } else if(locator.startsWith(ElementLocatorType.tag.toString())){
+        	return By.tagName(findLocatorSubstring(locator));
+        } 
+        else {
+            return By.id(locator); 
         }
     }
 
